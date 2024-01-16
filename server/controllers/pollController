@@ -1,0 +1,77 @@
+// controllers/pollController.js
+const Poll = require("../models/Poll");
+const Question = require("../models/Question");
+
+const createPoll = async (req, res) => {
+    try {
+      // Destructuring necessary fields from the request body
+      const { title, category, startDate, endDate, minReward, maxReward } = req.body;
+  
+      // Creating a new poll
+      const newPoll = await Poll.create({
+        title,
+        category,
+        startDate,
+        endDate,
+        minReward,
+        maxReward,
+      });
+  
+      res.status(201).json({
+        success: true,
+        message: 'Poll created successfully',
+        data: newPoll,
+      });
+    } catch (error) {
+      console.error('Error creating poll:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  };
+
+const getAllPolls = async (req, res) => {
+  // Implementation to get all polls
+};
+
+const getPollById = async (req, res) => {
+  // Implementation to get a poll by ID
+};
+
+const updatePoll = async (req, res) => {
+  // Implementation to update a poll
+};
+
+const addQuestionSetToPoll = async (req, res) => {
+  // Implementation to add a question set to a poll
+};
+
+const getAllQuestionsForPoll = async (req, res) => {
+  // Implementation to get all questions for a poll
+};
+
+const getQuestionById = async (req, res) => {
+  // Implementation to get a question by ID
+};
+
+const updateQuestion = async (req, res) => {
+  // Implementation to update a question
+};
+
+const deleteQuestion = async (req, res) => {
+  // Implementation to delete a question
+};
+
+module.exports = {
+  createPoll,
+  getAllPolls,
+  getPollById,
+  updatePoll,
+  addQuestionSetToPoll,
+  getAllQuestionsForPoll,
+  getQuestionById,
+  updateQuestion,
+  deleteQuestion,
+};
