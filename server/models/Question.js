@@ -16,7 +16,6 @@ const Question = sequelize.define("Question", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  // You can add more question-related fields as needed
 });
 
 module.exports = Question;

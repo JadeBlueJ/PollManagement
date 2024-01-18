@@ -16,7 +16,6 @@ const Option = sequelize.define("Option", {
     type: Sequelize.INTEGER,
     defaultValue:0,
   }
-  // You can add more question-related fields as needed
 });
 
 module.exports = Option;

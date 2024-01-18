@@ -25,8 +25,7 @@ app.use(require("./routes/user.js"));
 app.use(require("./routes/analytics.js"));
 
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match
-    // the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "*"); 
     res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept"
@@ -51,7 +50,7 @@ UserAnswer.belongsTo(Question);
 
 Option.hasMany(UserAnswer);
 UserAnswer.belongsTo(Option);
-// Sync the models with the database (create tables if they don't exist)
+
 // {alter:true}
 sequelize.sync()
   .then(() => {
@@ -60,7 +59,6 @@ sequelize.sync()
     server.listen(port, () =>
       console.log(`Server is up and running on port ${port}`)
     );
-    // Start your server or perform other operations here
   })
   .catch((err) => {
     console.error('Error syncing database:', err);
