@@ -1,4 +1,4 @@
-global.CONFIG = require("./configs/config");
+// global.CONFIG = require("./configs/config");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -9,7 +9,10 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const sequelize = require("./configs/db.connection.js");
 const Poll = require("./models/Poll.js")
 const Question = require("./models/Question.js")
+const Option = require("./models/Option.js")
+const User= require("./models/User.js")
 
+const UserAnswer= require("./models/UserAnswer.js")
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json({ limit: "50mb" }));
@@ -34,7 +37,20 @@ app.use(function (req, res, next) {
 // Define associations
 Poll.hasMany(Question);
 Question.belongsTo(Poll);
+Option.belongsTo(Question);
+Question.hasMany(Option);
 
+User.hasMany(UserAnswer);
+UserAnswer.belongsTo(User);
+
+Poll.hasMany(UserAnswer);
+UserAnswer.belongsTo(Poll);
+
+Question.hasMany(UserAnswer);
+UserAnswer.belongsTo(Question);
+
+Option.hasMany(UserAnswer);
+UserAnswer.belongsTo(Option);
 // Sync the models with the database (create tables if they don't exist)
 sequelize.sync()
   .then(() => {
