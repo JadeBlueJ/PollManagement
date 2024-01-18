@@ -7,10 +7,10 @@ const morgan = require("./utils/morgan");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 
 const sequelize = require("./configs/db.connection.js");
-const Poll = require("./models/Poll.js")
-const Question = require("./models/Question.js")
-const Option = require("./models/Option.js")
-const User= require("./models/User.js")
+const Poll = require("./models/Poll")
+const Question = require("./models/Question")
+const Option = require("./models/Option")
+const User= require("./models/User")
 
 const UserAnswer= require("./models/UserAnswer.js")
 const app = express();
@@ -21,7 +21,7 @@ app.use(morgan);
 app.use(cors());
 
 app.use(require("./routes/common.js"));
-// app.use("/admin", require("./routes/admin.js"));
+app.use(require("./routes/user.js"));
 // app.use("/manager", require("./routes/manager.js"));
 // app.use("/client", require("./routes/client"))
 app.use(function (req, res, next) {
@@ -52,6 +52,7 @@ UserAnswer.belongsTo(Question);
 Option.hasMany(UserAnswer);
 UserAnswer.belongsTo(Option);
 // Sync the models with the database (create tables if they don't exist)
+// {alter:true}
 sequelize.sync()
   .then(() => {
     console.log('Database synced successfully.');

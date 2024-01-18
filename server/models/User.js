@@ -2,7 +2,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../configs/db.connection");
 
-const User = sequelize.define("User", {
+const User = sequelize.define('User', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -15,7 +15,7 @@ const User = sequelize.define("User", {
   },
   totalRewards: {
     type: Sequelize.INTEGER,
-    default:0,
+    defaultValue:0,
   },
   // You can add more question-related fields as needed
 });
