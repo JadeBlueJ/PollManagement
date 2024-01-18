@@ -83,14 +83,6 @@ const getAllPolls = async (req, res) => {
     });
   }
 }; 
- 
-const getPollById = async (req, res) => {
-  // Implementation to get a poll by ID
-};
-
-const updatePoll = async (req, res) => {
-  // Implementation to update a poll
-};
 
 const addQuestionSetToPoll = async (req, res) => {
   try {
@@ -388,32 +380,99 @@ const submitPoll = async (req, res) => {
   }
 };
 
-const getAllQuestionsForPoll = async (req, res) => {
-  // Implementation to get all questions for a poll
-};
+const updatePollDetails = async (req, res) => {
+  try {
+    const { pollId } = req.params;
+    const updatedFields = req.body;
 
-const getQuestionById = async (req, res) => {
-  // Implementation to get a question by ID
-};
+    // Find the poll by pollId
+    const poll = await Poll.findByPk(pollId);
 
-const updateQuestion = async (req, res) => {
-  // Implementation to update a question
-};
+    // Handle case where the specified poll does not exist
+    if (!poll) {
+      return res.status(404).json({
+        success: false,
+        message: 'Poll not found',
+      });
+    }
 
-const deleteQuestion = async (req, res) => {
-  // Implementation to delete a question
+    // Update the poll with the provided fields
+    await poll.update(updatedFields);
+
+    res.status(200).json({
+      success: true,
+      message: 'Poll details updated successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+const updateQuestionSet  = async (req, res) => {
+  try {
+    const { pollId, questionId } = req.params;
+    const { text, options, type } = req.body;
+
+    // Find the poll by pollId
+    const poll = await Poll.findByPk(pollId, {
+      include: [
+        {
+          model: Question,
+          include: [Option],
+        },
+      ],
+    });
+
+    // Handle case where the specified poll does not exist
+    if (!poll) {
+      return res.status(404).json({
+        success: false,
+        message: 'Poll not found',
+      });
+    }
+
+    // Find the question within the poll by questionId
+    const question = poll.Questions.find((q) => q.id == questionId);
+
+    // Handle case where the specified question set does not exist
+    if (!question) {
+      return res.status(404).json({
+        success: false,
+        message: 'Question set not found',
+      });
+    }
+
+    // Update the question with the provided fields
+    await question.update({ text, type });
+
+    // Update options if provided
+    if (options && options.length > 0) {
+      await Option.destroy({ where: { QuestionId: question.id } });
+      await Option.bulkCreate(options.map((option) => ({ text: option, QuestionId: question.id })));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Question set updated successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
 };
 
 module.exports = {
   createPoll,
   getAllPolls,
-  getPollById,
-  updatePoll,
   addQuestionSetToPoll,
-  getAllQuestionsForPoll,
-  getQuestionById,
-  updateQuestion,
-  deleteQuestion,
   serveUserPollQuestions,
-  submitPoll
+  submitPoll,
+  updatePollDetails,
+  updateQuestionSet,
 };
