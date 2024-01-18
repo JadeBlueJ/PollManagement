@@ -309,11 +309,10 @@ const submitPoll = async (req, res) => {
       include: [Option],
       order: [['id', 'ASC']],
     });
-    console.log(`question to which answer is submitted:${JSON.stringify(question)}`)
     if (!question) {
       return res.status(404).json({
         success: false,
-        message: 'No more questions in the specified poll',
+        message: 'Invalid question',
       });
     }
 

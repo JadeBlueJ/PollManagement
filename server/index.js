@@ -22,8 +22,8 @@ app.use(cors());
 
 app.use(require("./routes/common.js"));
 app.use(require("./routes/user.js"));
-// app.use("/manager", require("./routes/manager.js"));
-// app.use("/client", require("./routes/client"))
+app.use(require("./routes/analytics.js"));
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match
     // the domain you will make the request from
